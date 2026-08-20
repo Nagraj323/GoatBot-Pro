@@ -3,7 +3,7 @@ exports.config = {
   version: "1.0.0",
   author: "EryXenX",
   countDown: 0,
-  role: 0,
+  role: 2,
   shortDescription: "Fork Link",
   longDescription: "Responds with GitHub repo link when 'fork' or 'repository' is mentioned. Cooldown: 10 seconds.",
   category: "system",
