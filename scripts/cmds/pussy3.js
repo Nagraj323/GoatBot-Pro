@@ -20,9 +20,6 @@ module.exports = {
 "https://i.ibb.co.com/GQV0PnSg/24650695.jpg",
 "https://i.ibb.co.com/cmWtS6K/52371.jpg",
 "https://i.ibb.co.com/BHQ5CqBR/images-4.jpg",
-
-
-
   ]
 let img = link[Math.floor(Math.random()*link.length)]
 message.send({
