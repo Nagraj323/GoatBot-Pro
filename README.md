@@ -1,222 +1,207 @@
-<div align="center">
+<p align="center">
+  <img src="https://i.imgur.com/8T48Ddf.png" alt="ARIYAN CHAT BOT Banner" width="100%"/>
+</p>
 
-<img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&weight=700&size=18&duration=3000&pause=800&color=00FFD1&center=true&vCenter=true&width=700&lines=GoatBot-Pro;Facebook+Messenger+Bot+Framework;Built+on+Goat+Bot+V2+%E2%80%94+Modified+by+EryXenX;Fast+%E2%80%A2+Smart+%E2%80%A2+Reliable+%E2%80%A2+Powerful" />
+<h1 align="center">🤖 ARIYAN CHAT BOT 🤖</h1>
 
-<br/>
+<p align="center">
+  <b>✨ Advanced Facebook Messenger ChatBot ✨</b>
+</p>
 
-![Version](https://img.shields.io/badge/Version-2.0.0-00FFD1?style=for-the-badge&logo=github&logoColor=black)
-![Node](https://img.shields.io/badge/Node.js-18.x-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
-![Base](https://img.shields.io/badge/Based_on-Goat_Bot_V2-FF6B6B?style=for-the-badge&logo=github&logoColor=white)
-![Fork](https://img.shields.io/badge/Fork_by-EryXenX-9B59B6?style=for-the-badge&logo=github&logoColor=white)
-![FCA](https://img.shields.io/badge/FCA-fca--eryxenx-00FFD1?style=for-the-badge&logoColor=black)
-
-</div>
-
----
-
-## ◈ About
-
-Assalamu Alaikum! **GoatBot-Pro** is an enhanced fork of [Goat Bot V2](https://github.com/ntkhang03/Goat-Bot-V2) by **ntkhang03**, rebuilt and maintained by **EryXenX (Mohammad Akash)** with new features, multi-language support, and custom commands.
-
-| Feature | Description |
-|---|---|
-| 🔌 **Custom FCA** | Uses `fca-eryxenx` — patched fork with bug fixes and stability improvements |
-| ⚙️ **Handler Improvements** | No-prefix system for bot admins, smart command suggestion |
-| 🌐 **Multi-Language** | Supports EN, BN, HI, TL, AR, VI |
-| 🎨 **UI Overhaul** | Redesigned message templates with clean formatting |
-| 🛡️ **React Unsend** | Auto-unsend messages on specific emoji reactions |
-| 🔧 **Setting Command** | Full bot config control via chat — no need to edit files manually |
-
-> ⚠️ For educational purposes only. Any misuse or illegal activity is solely the user's responsibility.
+<p align="center">
+  <img src="https://img.shields.io/badge/Owner-ARIYAN-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Language-JavaScript-yellow?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Runtime-Node.js-green?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Status-Active-success?style=for-the-badge" />
+</p>
 
 ---
 
-## ◈ Support
+## 🌟 Welcome To ARIYAN CHAT BOT
 
-<div align="center">
+**ARIYAN CHAT BOT** is a customized Facebook Messenger chatbot based on **GoatBot V2**.
 
-[![Messenger Group](https://img.shields.io/badge/Join%20Support%20Group-0084FF?style=for-the-badge&logo=messenger&logoColor=white)](https://m.me/j/AbayU2oh5OPVLvZm/?send_source=gc%3Acopy_invite_link_c)
-[![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://facebook.com/EryXenX)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/EryXenX)
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com/@EryXenX)
-[![Telegram](https://img.shields.io/badge/Telegram-0088CC?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/EryXenX_Official)
-[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/EryXenX)
+The bot is designed for fast automated replies, AI conversations, custom responses, group events and Messenger automation features.
 
-</div>
+> 🤖 **Bot Name:** ARIYAN CHAT BOT  
+> 👑 **Owner:** ARIYAN SABBIR  
+> ⚡ **Platform:** Facebook Messenger  
+> 💻 **Powered By:** Node.js + JavaScript
 
 ---
 
-## ◈ Credits
+## ✨ Features
 
-| Role | Person | Link |
-|---|---|---|
-| 🏆 **Original Creator** | NTKhang | [Goat Bot V2](https://github.com/ntkhang03/Goat-Bot-V2) |
-| 🔧 **This Fork** | EryXenX | [GoatBot-Pro](https://github.com/EryXenX/GoatBot-Pro) |
-
-> All core copyright belongs to **NTKhang (ntkhang03)**. This fork does not override the original license.
-
----
-
-## ◈ Setup Tutorial
-
-<div align="center">
-
-### 📹 Watch Before You Start
-
-<a href="https://youtu.be/gPf_BFhQz_w?si=-iknmkmFd_NcRahY">
-  <img src="https://img.youtube.com/vi/gPf_BFhQz_w/maxresdefault.jpg" alt="GoatBot-Pro Setup Tutorial" width="680" />
-</a>
-
-<br/>
-
-[![Watch Tutorial](https://img.shields.io/badge/▶%20Watch%20Full%20Setup%20Tutorial-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/gPf_BFhQz_w?si=-iknmkmFd_NcRahY)
-
-</div>
+- 🤖 Gemini AI Chat System
+- 💬 Natural Bangla & Banglish Replies
+- 🧠 Custom Teach System
+- ✏️ Edit Custom Replies
+- 🗑️ Remove Custom Replies
+- 📚 Custom Reply List
+- 🔄 Automatic Reply Chain
+- 🎓 AutoTeach System
+- 👥 Group Update Events
+- 📞 Group Call Event Support
+- 🖼️ Group Image Update Detection
+- 📝 Group Name Change Detection
+- ⚡ Fast & Lightweight
+- 🔐 Environment Variable Support
+- 🚀 Railway Deployment Support
 
 ---
 
-## ◈ Setup
+## 🧠 Gemini AI
 
-```bash
-git clone https://github.com/EryXenX/GoatBot-Pro.git
-cd GoatBot-Pro
-npm install
-node index.js
+ARIYAN CHAT BOT uses **Google Gemini AI** for intelligent conversations.
+
+The bot can understand and reply in:
+
+- 🇧🇩 বাংলা
+- 🔤 Banglish
+- 🇬🇧 English
+
+### AI Flow
+
+```text
+User
+  ↓
+ARIYAN CHAT BOT
+  ↓
+Gemini AI
+  ↓
+Smart Response
+
+
+---
+
+📞 Contact Me
+
+<p align="center"><a href="https://www.facebook.com/ItsAriyanSabbir" target="_blank">
+  <img src="https://img.shields.io/badge/Facebook-Ariyan%20Sabbir-blue?style=for-the-badge&logo=facebook" alt="Facebook"/>
+</a><a href="https://wa.me/8801937278213" target="_blank">
+  <img src="https://img.shields.io/badge/WhatsApp-01937278213-green?style=for-the-badge&logo=whatsapp&logoColor=white" alt="WhatsApp"/>
+</a></p>
+---
+
+👑 Owner Information
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Owner-Ariyan%20Sabbir-blue?style=for-the-badge" />
+</p><p align="center">📱 WhatsApp: 01937278213
+
+<br>🌐 Facebook: <a href="https://www.facebook.com/ItsAriyanSabbir"> ItsAriyanSabbir </a>
+
+</p>
+---
+
+🛠️ Technologies
+
+<p align="center">
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/Gemini%20AI-4285F4?style=for-the-badge&logo=google&logoColor=white" />
+  <img src="https://img.shields.io/badge/GoatBot%20V2-000000?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Railway-000000?style=for-the-badge&logo=railway&logoColor=white" />
+</p>
+---
+
+🚀 Deployment
+
+ARIYAN CHAT BOT can be deployed on:
+
+🚂 Railway
+
+💻 Local Node.js Environment
+
+🌐 Other Node.js Hosting Platforms
+
+
+Requirements
+
+Node.js 20.x
+npm
+Git
+GEMINI_API_KEY
+Facebook Account
+
+
+---
+
+🔐 Environment Variables
+
+Create your environment variables securely:
+
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY
+
+⚠️ Never upload your API key directly into GitHub.
+
+
+---
+
+📂 Main Structure
+
+ARIYAN CHAT BOT
+│
+├── Goat.js
+├── index.js
+├── package.json
+│
+├── Script/
+│   ├── commands/
+│   └── events/
+│
+├── config/
+├── cache/
+└── README.md
+
+
+---
+
+💬 Bot Commands
+
+The bot supports various command categories including:
+
+🤖 AI Commands
+🧠 Teach Commands
+✏️ Edit Commands
+🗑️ Remove Commands
+📚 List Commands
+👥 Group Commands
+⚙️ Admin Commands
+🎮 Fun Commands
+
+
+---
+
+📊 Bot System
+
+Facebook Messenger
+        ↓
+   ARIYAN CHAT BOT
+        ↓
+    GoatBot V2
+        ↓
+ ┌───────────────┐
+ │ Command System │
+ │ Event System   │
+ │ AI System      │
+ │ Reply System   │
+ └───────────────┘
+        ↓
+   Smart Response
+
+
+---
+
+❤️ Credits
+
+Base: GoatBot V2
+AI: Google Gemini
+Customization: ARIYAN SABBIR
+
+<p align="center">
+  <b>✨ Made With ❤️ By ARIYAN SABBIR ✨</b>
+</p><p align="center">
+  <img src="https://komarev.com/ghpvc/?username=ItsAriyan-X&label=Repository%20Views&color=blue&style=for-the-badge" alt="Repository Views"/>
+</p>
 ```
-
-Add your Facebook cookies to `account.txt` (JSON array format from EditThisCookie), then configure `config.json`.
-
----
-
-## ◈ Command Structure
-
-Commands go in `scripts/cmds/yourcommand.js`.
-
-```js
-module.exports = {
-  config: {
-    name: "commandname",
-    version: "1.0.0",
-    author: "YourName",
-    countDown: 5,
-    role: 0,
-    shortDescription: "...",
-    longDescription: "...",
-    category: "fun",
-    guide: "{prefix}commandname [args]"
-  },
-
-  onStart: async function ({ api, event, args, message, getLang }) {
-    message.reply("Hello!");
-  },
-
-  onReply: async function ({ api, event, Reply, message }) {
-    if (event.senderID !== Reply.author) return;
-    message.reply(`You replied: ${event.body}`);
-  },
-
-  onReaction: async function ({ api, event, Reaction, message }) {
-    message.reply(`You reacted with: ${event.reaction}`);
-  },
-
-  onChat: async function ({ api, event, message }) {
-    if (event.body === "hello") message.reply("hi!");
-  },
-
-  onEvent: async function ({ api, event, message }) {
-    if (event.logMessageType === "log:subscribe") {
-      message.reply("Welcome!");
-    }
-  }
-};
-```
-
----
-
-## ◈ Permission Roles
-
-| Value | Who can use |
-|---|---|
-| `0` | Everyone |
-| `1` | Group admins only |
-| `2` | Bot admins only (set in `config.json`) |
-
----
-
-## ◈ API Reference
-
-```js
-message.reply("text")
-api.sendMessage("text", threadID)
-api.sendMessage({ body: "text", attachment }, tid)
-api.setMessageReaction("✅", event.messageID, () => {}, true)
-api.unsendMessage(messageID)
-api.getCurrentUserID()
-await api.getThreadInfo(threadID)
-await api.getUserInfo(userID)
-```
-
----
-
-## ◈ onReply Pattern
-
-```js
-const sent = await message.reply("What's your name?");
-global.GoatBot.onReply.set(sent.messageID, {
-  commandName: "mycommand",
-  messageID: sent.messageID,
-  author: event.senderID,
-  step: 1
-});
-
-onReply: async function ({ api, event, Reply, message }) {
-  if (event.senderID !== Reply.author) return;
-  message.reply(`Hello, ${event.body}!`);
-}
-```
-
----
-
-## ◈ Event Types
-
-```js
-switch (event.logMessageType) {
-  case "log:subscribe":
-  case "log:unsubscribe":
-  case "log:thread-name":
-  case "log:thread-image":
-  case "log:thread-admins":
-}
-```
-
----
-
-## ◈ config.json Key Options
-
-```json
-{
-  "prefix": "-",
-  "adminBot": ["your_facebook_id"],
-  "noPrefix": { "enable": false },
-  "reactUnsend": {
-    "enable": true,
-    "onlyAdmin": true,
-    "emojis": ["😡"]
-  },
-  "optionsFca": {
-    "listenEvents": true,
-    "autoMarkDelivery": false,
-    "updatePresence": false,
-    "selfListen": false,
-    "autoReconnect": true
-  }
-}
-```
-
----
-
-<div align="center">
-  <sub>Built on the shoulders of giants · Respect Open Source · Credit your sources</sub>
-  <br/>
-  <sub><b>Original Work © NTKhang (ntkhang03) &nbsp;|&nbsp; Fork by EryXenX (Mohammad Akash)</b></sub>
-</div>
