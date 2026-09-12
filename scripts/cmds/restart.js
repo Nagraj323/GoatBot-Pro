@@ -24,18 +24,6 @@ module.exports = {
 		},
 		en: {
 			restartting: "🔄 | Restarting bot..."
-		},
-		tl: {
-			restartting: "🔄 | Nire-restart ang bot..."
-		},
-		hi: {
-			restartting: "🔄 | Bot restart ho raha hai..."
-		},
-		ar: {
-			restartting: "🔄 | جارٍ إعادة تشغيل البوت..."
-		},
-		bn: {
-			restartting: "🔄 | Bot পুনরায় চালু হচ্ছে..."
 		}
 	},
 
