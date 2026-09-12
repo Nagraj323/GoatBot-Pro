@@ -2,10 +2,21 @@ const axios = require("axios");
 
 const API_URL = "https://vireonix.ai/v1/chat/completions";
 
+// ==========================================
+// 🤖 ARIYAN AI
+// বাংলা + English + Banglish
+// Proper Reply Chain + Conversation Memory
+// ==========================================
+
 const chatHistory = new Map();
+
 const MAX_HISTORY = 12;
 const HISTORY_TIMEOUT = 30 * 60 * 1000;
 
+
+// ==========================================
+// ⌨️ Typing Indicator
+// ==========================================
 async function typing(api, threadID) {
   try {
     if (api.sendTypingIndicator) {
@@ -20,6 +31,10 @@ async function typing(api, threadID) {
   } catch {}
 }
 
+
+// ==========================================
+// 🧠 Conversation Memory
+// ==========================================
 function getHistory(key) {
   const data = chatHistory.get(key);
 
@@ -33,6 +48,7 @@ function getHistory(key) {
   return data.messages || [];
 }
 
+
 function saveHistory(key, messages) {
   chatHistory.set(key, {
     messages: messages.slice(-MAX_HISTORY),
@@ -40,19 +56,32 @@ function saveHistory(key, messages) {
   });
 }
 
+
+// ==========================================
+// 🔗 Proper Reply Chain
+// ==========================================
 function setReply(info, event, historyKey) {
   if (!info?.messageID) return;
 
   global.GoatBot.onReply.set(info.messageID, {
     commandName: "baby",
+
+    // Bot-এর message ID
     messageID: info.messageID,
+
     author: event.senderID,
     threadID: event.threadID,
+
     type: "reply",
+
     historyKey
   });
 }
 
+
+// ==========================================
+// 😂 Random Replies
+// ==========================================
 const randomReplies = [
   "𝐀𝐬𝐬𝐚𝐥𝐚𝐦𝐮 𝐰𝐚𝐥𝐚𝐢𝐤𝐮𝐦 ♥",
   "বলেন sir__😌",
@@ -73,26 +102,34 @@ const randomReplies = [
   "𝙜𝙤𝙥 𝙜𝙤𝙥 𝙜𝙤𝙥 🙊"
 ];
 
+
+// ==========================================
+// 🧠 AI Request
+// ==========================================
 async function askAI(text, history = []) {
   try {
+
     const messages = [
       {
         role: "system",
         content:
-          "You are ARIYAN AI, a friendly and casual Messenger chatbot. " +
+          "You are ARIYAN AI, a friendly Messenger chatbot. " +
           "You understand Bangla, English and Banglish. " +
           "If the user writes Bangla, answer naturally in Bangla. " +
           "If the user writes English, answer naturally in English. " +
-          "If the user mixes Bangla and English, reply naturally in the same mixed style. " +
+          "If the user mixes Bangla and English, reply naturally in the same style. " +
           "Remember previous conversation context when relevant. " +
           "Keep casual replies reasonably short."
       },
+
       ...history,
+
       {
         role: "user",
         content: text
       }
     ];
+
 
     const response = await axios.post(
       API_URL,
@@ -108,14 +145,17 @@ async function askAI(text, history = []) {
       }
     );
 
+
     const answer =
       response.data?.choices?.[0]?.message?.content;
+
 
     if (!answer) return null;
 
     return answer.trim();
 
   } catch (error) {
+
     console.error(
       "❌ ARIYAN AI ERROR:",
       error.response?.status,
@@ -126,13 +166,21 @@ async function askAI(text, history = []) {
   }
 }
 
+
+// ==========================================
+// 📦 COMMAND
+// ==========================================
 module.exports = {
 
   config: {
     name: "baby",
-    version: "12.0",
+
+    version: "13.0",
+
     author: "ARIYAN AHMED SABBIR",
+
     countDown: 2,
+
     role: 0,
 
     shortDescription: {
@@ -140,7 +188,8 @@ module.exports = {
     },
 
     longDescription: {
-      en: "Bangla + English AI with conversation memory"
+      en:
+        "Bangla + English AI with proper reply chain and conversation memory"
     },
 
     category: "AI",
@@ -165,48 +214,84 @@ module.exports = {
     ]
   },
 
+
+  // ==========================================
+  // ▶️ ON START
+  // ==========================================
   onStart: async function ({ api, event, args }) {
 
     const text = args.join(" ").trim();
+
     const historyKey =
       `${event.threadID}_${event.senderID}`;
 
+
+    // ========================================
+    // শুধু baby/bot লিখলে
+    // ========================================
     if (!text) {
 
       const reply =
         randomReplies[
-          Math.floor(Math.random() * randomReplies.length)
+          Math.floor(
+            Math.random() * randomReplies.length
+          )
         ];
+
 
       const info = await api.sendMessage(
         reply,
         event.threadID
       );
 
-      setReply(info, event, historyKey);
+
+      setReply(
+        info,
+        event,
+        historyKey
+      );
+
       return;
     }
 
-    await typing(api, event.threadID);
 
-    const history = getHistory(historyKey);
-    const answer = await askAI(text, history);
+    await typing(
+      api,
+      event.threadID
+    );
+
+
+    const history =
+      getHistory(historyKey);
+
+
+    const answer =
+      await askAI(
+        text,
+        history
+      );
+
 
     if (!answer) {
+
       return api.sendMessage(
         "⚠️ ARIYAN AI এখন উত্তর দিতে পারছে না। একটু পরে আবার চেষ্টা করো।",
         event.threadID
       );
     }
 
+
+    // Memory update
     saveHistory(
       historyKey,
       [
         ...history,
+
         {
           role: "user",
           content: text
         },
+
         {
           role: "assistant",
           content: answer
@@ -214,44 +299,88 @@ module.exports = {
       ]
     );
 
+
+    // ========================================
+    // ⭐ USER MESSAGE-এর উপর REPLY
+    // ========================================
     const info = await api.sendMessage(
       `🤖 ARIYAN AI\n\n${answer}`,
-      event.threadID
+      event.threadID,
+      event.messageID
+        ? {
+            replyTo: event.messageID
+          }
+        : undefined
     );
 
-    setReply(info, event, historyKey);
+
+    // পরের chain
+    setReply(
+      info,
+      event,
+      historyKey
+    );
   },
 
-  onReply: async function ({ api, event, Reply }) {
 
-    const text = event.body?.trim();
+  // ==========================================
+  // 💬 ON REPLY
+  // ==========================================
+  onReply: async function ({
+    api,
+    event,
+    Reply
+  }) {
+
+    const text =
+      event.body?.trim();
+
 
     if (!text) return;
+
 
     const historyKey =
       Reply?.historyKey ||
       `${event.threadID}_${event.senderID}`;
 
-    await typing(api, event.threadID);
 
-    const history = getHistory(historyKey);
-    const answer = await askAI(text, history);
+    await typing(
+      api,
+      event.threadID
+    );
+
+
+    const history =
+      getHistory(historyKey);
+
+
+    const answer =
+      await askAI(
+        text,
+        history
+      );
+
 
     if (!answer) {
+
       return api.sendMessage(
         "⚠️ উত্তর দিতে একটু সমস্যা হচ্ছে 😵‍💫",
         event.threadID
       );
     }
 
+
+    // Memory update
     saveHistory(
       historyKey,
       [
         ...history,
+
         {
           role: "user",
           content: text
         },
+
         {
           role: "assistant",
           content: answer
@@ -259,36 +388,64 @@ module.exports = {
       ]
     );
 
+
+    // ========================================
+    // ⭐ USER-এর REPLY MESSAGE-এর উপর REPLY
+    // ========================================
     const info = await api.sendMessage(
       `🤖 ARIYAN AI\n\n${answer}`,
-      event.threadID
+      event.threadID,
+      event.messageID
+        ? {
+            replyTo: event.messageID
+          }
+        : undefined
     );
 
-    setReply(info, event, historyKey);
+
+    // Chain continue
+    setReply(
+      info,
+      event,
+      historyKey
+    );
   },
 
-  onChat: async function ({ api, event }) {
 
-    const body = event.body?.trim();
+  // ==========================================
+  // 👀 ON CHAT
+  // ==========================================
+  onChat: async function ({
+    api,
+    event
+  }) {
+
+    const body =
+      event.body?.trim();
+
 
     if (!body) return;
 
-    const lower = body.toLowerCase();
+
+    const lower =
+      body.toLowerCase();
+
 
     const triggers = [
       "baby",
       "bby",
       "bbe",
       "babe",
-      "Janu",
-      "Bot",
+      "sam",
+      "mari",
       "maria",
       "hippi",
       "xan",
       "bbz",
-      "সাব্বির",
+      "মারিয়া",
       "bot"
     ];
+
 
     const prefixes = [
       "baby ",
@@ -305,66 +462,124 @@ module.exports = {
       "bot "
     ];
 
+
+    // ========================================
+    // শুধু trigger
+    // ========================================
     if (triggers.includes(lower)) {
 
       const reply =
         randomReplies[
-          Math.floor(Math.random() * randomReplies.length)
+          Math.floor(
+            Math.random() * randomReplies.length
+          )
         ];
+
 
       const historyKey =
         `${event.threadID}_${event.senderID}`;
 
+
       const info = await api.sendMessage(
         reply,
-        event.threadID
+        event.threadID,
+        event.messageID
+          ? {
+              replyTo: event.messageID
+            }
+          : undefined
       );
 
-      setReply(info, event, historyKey);
+
+      setReply(
+        info,
+        event,
+        historyKey
+      );
+
       return;
     }
 
+
+    // ========================================
+    // Prefix detect
+    // ========================================
     let message = null;
+
 
     for (const prefix of prefixes) {
 
       if (lower.startsWith(prefix)) {
+
         message =
           body.slice(prefix.length).trim();
+
         break;
       }
     }
 
+
     if (!message) return;
+
 
     if (!message.length) {
 
       const reply =
         randomReplies[
-          Math.floor(Math.random() * randomReplies.length)
+          Math.floor(
+            Math.random() * randomReplies.length
+          )
         ];
+
 
       const historyKey =
         `${event.threadID}_${event.senderID}`;
 
+
       const info = await api.sendMessage(
         reply,
-        event.threadID
+        event.threadID,
+        event.messageID
+          ? {
+              replyTo: event.messageID
+            }
+          : undefined
       );
 
-      setReply(info, event, historyKey);
+
+      setReply(
+        info,
+        event,
+        historyKey
+      );
+
       return;
     }
 
+
+    // ========================================
+    // 🧠 AI
+    // ========================================
     const historyKey =
       `${event.threadID}_${event.senderID}`;
 
-    await typing(api, event.threadID);
 
-    const history = getHistory(historyKey);
+    await typing(
+      api,
+      event.threadID
+    );
+
+
+    const history =
+      getHistory(historyKey);
+
 
     const answer =
-      await askAI(message, history);
+      await askAI(
+        message,
+        history
+      );
+
 
     if (!answer) {
 
@@ -374,14 +589,18 @@ module.exports = {
       );
     }
 
+
+    // Memory
     saveHistory(
       historyKey,
       [
         ...history,
+
         {
           role: "user",
           content: message
         },
+
         {
           role: "assistant",
           content: answer
@@ -389,11 +608,26 @@ module.exports = {
       ]
     );
 
+
+    // ========================================
+    // ⭐ ORIGINAL USER MESSAGE-এর উপর REPLY
+    // ========================================
     const info = await api.sendMessage(
       `🤖 ARIYAN AI\n\n${answer}`,
-      event.threadID
+      event.threadID,
+      event.messageID
+        ? {
+            replyTo: event.messageID
+          }
+        : undefined
     );
 
-    setReply(info, event, historyKey);
+
+    // Chain continue
+    setReply(
+      info,
+      event,
+      historyKey
+    );
   }
 };
