@@ -5,7 +5,7 @@ const API_URL = "https://vireonix.ai/v1/chat/completions";
 // ==========================================
 // 🤖 ARIYAN AI
 // বাংলা + English + Banglish
-// Proper Reply Chain + Conversation Memory
+// Reply Chain + Conversation Memory
 // ==========================================
 
 const chatHistory = new Map();
@@ -48,6 +48,7 @@ function getHistory(key) {
   return data.messages || [];
 }
 
+
 function saveHistory(key, messages) {
   chatHistory.set(key, {
     messages: messages.slice(-MAX_HISTORY),
@@ -57,7 +58,7 @@ function saveHistory(key, messages) {
 
 
 // ==========================================
-// 🔗 Save Bot Reply Chain
+// 🔗 Proper Reply Chain
 // ==========================================
 function setReply(info, event, historyKey) {
   if (!info?.messageID) return;
@@ -74,26 +75,20 @@ function setReply(info, event, historyKey) {
 
 
 // ==========================================
-// 📩 Send Reply
+// 📩 Reply Helper
 // ==========================================
-async function sendReply(api, event, text) {
+async function sendBotReply(message, text) {
   try {
-    // GoatBot/FCA style:
-    // 4th argument = message ID being replied to
-    return await api.sendMessage(
-      text,
-      event.threadID,
-      null,
-      event.messageID
-    );
+    return await message.reply(text);
   } catch (error) {
-    console.error("❌ Reply send error:", error.message);
+    console.error("❌ Reply Error:", error.message);
 
-    // Fallback: normal message
-    return await api.sendMessage(
-      text,
-      event.threadID
-    );
+    // Fallback
+    try {
+      return await message.send(text);
+    } catch {
+      return null;
+    }
   }
 }
 
@@ -114,7 +109,7 @@ const randomReplies = [
   "আম গাছে আম নাই ঢিল কেন মারো, তোমার সাথে প্রেম নাই বেবি কেন ডাকো 😒🐸",
   "কি হলো, মিস টিস করচ্ছো নাকি 🤣",
   "𝐓𝐫𝐮𝐬𝐭 𝐦𝐞 𝐢𝐚𝐦 ARIYAN 𝐟𝐫𝐨𝐦 SA BB IR 🧃",
-  "𝗛𝗲𝘆 𝘅𝗮𝗻 𝗶𝗮𝗺 ARIYAN 𝐀𝐈 ✨",
+  "𝗛𝗲𝘆 𝘅𝗮𝗻 𝗶𝗮𝗺 ARIYAN AI ✨",
   "𝐓𝐨𝐫 𝐣𝐧𝐧𝐨 𝐛𝐬𝐢 𝐚𝐜𝐡𝐢, 𝐣𝐥𝐝𝐢 𝐛𝐨𝐥 𝐤𝐢 𝐝𝐫𝐤𝐚𝐫 ✨",
   "একাকিত্ব মানুষকে ধীরে ধীরে শেষ করে ফেলে 🥀",
   "চা খাবেন, ঢেলে দেবো..? 😙🤏",
@@ -149,6 +144,7 @@ async function askAI(text, history = []) {
       }
     ];
 
+
     const response = await axios.post(
       API_URL,
       {
@@ -163,8 +159,10 @@ async function askAI(text, history = []) {
       }
     );
 
+
     const answer =
       response.data?.choices?.[0]?.message?.content;
+
 
     if (!answer) return null;
 
@@ -190,10 +188,13 @@ module.exports = {
 
   config: {
     name: "baby",
+
     version: "14.0",
+
     author: "ARIYAN AHMED SABBIR",
 
     countDown: 2,
+
     role: 0,
 
     shortDescription: {
@@ -202,7 +203,7 @@ module.exports = {
 
     longDescription: {
       en:
-        "Bangla + English AI with proper reply chain and conversation memory"
+        "Bangla + English AI with reply chain and conversation memory"
     },
 
     category: "AI",
@@ -231,29 +232,40 @@ module.exports = {
   // ==========================================
   // ▶️ ON START
   // ==========================================
-  onStart: async function ({ api, event, args }) {
+  onStart: async function ({
+    api,
+    event,
+    args,
+    message
+  }) {
 
-    const text = args.join(" ").trim();
+    const text =
+      args.join(" ").trim();
 
     const historyKey =
       `${event.threadID}_${event.senderID}`;
 
 
+    // ========================================
     // শুধু baby লিখলে
+    // ========================================
     if (!text) {
 
       const reply =
         randomReplies[
           Math.floor(
-            Math.random() * randomReplies.length
+            Math.random() *
+            randomReplies.length
           )
         ];
 
-      const info = await sendReply(
-        api,
-        event,
-        reply
-      );
+
+      const info =
+        await sendBotReply(
+          message,
+          reply
+        );
+
 
       setReply(
         info,
@@ -284,9 +296,8 @@ module.exports = {
 
     if (!answer) {
 
-      await sendReply(
-        api,
-        event,
+      await sendBotReply(
+        message,
         "⚠️ ARIYAN AI এখন উত্তর দিতে পারছে না। একটু পরে আবার চেষ্টা করো।"
       );
 
@@ -294,7 +305,9 @@ module.exports = {
     }
 
 
-    // Memory update
+    // ========================================
+    // 🧠 Memory Update
+    // ========================================
     saveHistory(
       historyKey,
       [
@@ -313,15 +326,17 @@ module.exports = {
     );
 
 
-    // ⭐ USER-এর ORIGINAL MESSAGE-এর উপর reply
-    const info = await sendReply(
-      api,
-      event,
-      `🤖 ARIYAN AI\n\n${answer}`
-    );
+    // ========================================
+    // ⭐ USER MESSAGE-এর REPLY
+    // ========================================
+    const info =
+      await sendBotReply(
+        message,
+        `🤖 ARIYAN AI\n\n${answer}`
+      );
 
 
-    // পরের reply chain
+    // পরের chain
     setReply(
       info,
       event,
@@ -336,11 +351,13 @@ module.exports = {
   onReply: async function ({
     api,
     event,
-    Reply
+    Reply,
+    message
   }) {
 
     const text =
       event.body?.trim();
+
 
     if (!text) return;
 
@@ -369,9 +386,8 @@ module.exports = {
 
     if (!answer) {
 
-      await sendReply(
-        api,
-        event,
+      await sendBotReply(
+        message,
         "⚠️ উত্তর দিতে একটু সমস্যা হচ্ছে 😵‍💫"
       );
 
@@ -379,7 +395,9 @@ module.exports = {
     }
 
 
-    // Memory update
+    // ========================================
+    // 🧠 Memory Update
+    // ========================================
     saveHistory(
       historyKey,
       [
@@ -398,13 +416,14 @@ module.exports = {
     );
 
 
-    // ⭐ USER যেই reply message পাঠিয়েছে,
-    // সেই message-এর উপরেই AI reply করবে
-    const info = await sendReply(
-      api,
-      event,
-      `🤖 ARIYAN AI\n\n${answer}`
-    );
+    // ========================================
+    // ⭐ USER-এর REPLY MESSAGE-এর REPLY
+    // ========================================
+    const info =
+      await sendBotReply(
+        message,
+        `🤖 ARIYAN AI\n\n${answer}`
+      );
 
 
     // Chain continue
@@ -421,11 +440,13 @@ module.exports = {
   // ==========================================
   onChat: async function ({
     api,
-    event
+    event,
+    message
   }) {
 
     const body =
       event.body?.trim();
+
 
     if (!body) return;
 
@@ -474,7 +495,8 @@ module.exports = {
       const reply =
         randomReplies[
           Math.floor(
-            Math.random() * randomReplies.length
+            Math.random() *
+            randomReplies.length
           )
         ];
 
@@ -483,11 +505,11 @@ module.exports = {
         `${event.threadID}_${event.senderID}`;
 
 
-      const info = await sendReply(
-        api,
-        event,
-        reply
-      );
+      const info =
+        await sendBotReply(
+          message,
+          reply
+        );
 
 
       setReply(
@@ -501,33 +523,38 @@ module.exports = {
 
 
     // ========================================
-    // Prefix detect
+    // Prefix Detect
     // ========================================
-    let message = null;
+    let userMessage = null;
 
 
     for (const prefix of prefixes) {
 
       if (lower.startsWith(prefix)) {
 
-        message =
-          body.slice(prefix.length).trim();
+        userMessage =
+          body
+            .slice(prefix.length)
+            .trim();
 
         break;
       }
     }
 
 
-    if (!message) return;
+    if (!userMessage) return;
 
 
-    // baby / bot শুধু লিখলে
-    if (!message.length) {
+    // ========================================
+    // শুধু baby / bot
+    // ========================================
+    if (!userMessage.length) {
 
       const reply =
         randomReplies[
           Math.floor(
-            Math.random() * randomReplies.length
+            Math.random() *
+            randomReplies.length
           )
         ];
 
@@ -536,11 +563,11 @@ module.exports = {
         `${event.threadID}_${event.senderID}`;
 
 
-      const info = await sendReply(
-        api,
-        event,
-        reply
-      );
+      const info =
+        await sendBotReply(
+          message,
+          reply
+        );
 
 
       setReply(
@@ -572,16 +599,15 @@ module.exports = {
 
     const answer =
       await askAI(
-        message,
+        userMessage,
         history
       );
 
 
     if (!answer) {
 
-      await sendReply(
-        api,
-        event,
+      await sendBotReply(
+        message,
         "⚠️ ARIYAN AI এখন একটু ব্যস্ত 😵‍💫"
       );
 
@@ -589,7 +615,9 @@ module.exports = {
     }
 
 
-    // Memory update
+    // ========================================
+    // 🧠 Memory
+    // ========================================
     saveHistory(
       historyKey,
       [
@@ -597,7 +625,7 @@ module.exports = {
 
         {
           role: "user",
-          content: message
+          content: userMessage
         },
 
         {
@@ -608,12 +636,14 @@ module.exports = {
     );
 
 
-    // ⭐ ORIGINAL USER MESSAGE-এর উপর reply
-    const info = await sendReply(
-      api,
-      event,
-      `🤖 ARIYAN AI\n\n${answer}`
-    );
+    // ========================================
+    // ⭐ ORIGINAL USER MESSAGE-এর REPLY
+    // ========================================
+    const info =
+      await sendBotReply(
+        message,
+        `🤖 ARIYAN AI\n\n${answer}`
+      );
 
 
     // Chain continue
@@ -623,4 +653,4 @@ module.exports = {
       historyKey
     );
   }
-};t
+};
