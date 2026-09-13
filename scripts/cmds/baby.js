@@ -48,7 +48,6 @@ function getHistory(key) {
   return data.messages || [];
 }
 
-
 function saveHistory(key, messages) {
   chatHistory.set(key, {
     messages: messages.slice(-MAX_HISTORY),
@@ -58,24 +57,44 @@ function saveHistory(key, messages) {
 
 
 // ==========================================
-// 🔗 Proper Reply Chain
+// 🔗 Save Bot Reply Chain
 // ==========================================
 function setReply(info, event, historyKey) {
   if (!info?.messageID) return;
 
   global.GoatBot.onReply.set(info.messageID, {
     commandName: "baby",
-
-    // Bot-এর message ID
     messageID: info.messageID,
-
     author: event.senderID,
     threadID: event.threadID,
-
     type: "reply",
-
     historyKey
   });
+}
+
+
+// ==========================================
+// 📩 Send Reply
+// ==========================================
+async function sendReply(api, event, text) {
+  try {
+    // GoatBot/FCA style:
+    // 4th argument = message ID being replied to
+    return await api.sendMessage(
+      text,
+      event.threadID,
+      null,
+      event.messageID
+    );
+  } catch (error) {
+    console.error("❌ Reply send error:", error.message);
+
+    // Fallback: normal message
+    return await api.sendMessage(
+      text,
+      event.threadID
+    );
+  }
 }
 
 
@@ -95,7 +114,7 @@ const randomReplies = [
   "আম গাছে আম নাই ঢিল কেন মারো, তোমার সাথে প্রেম নাই বেবি কেন ডাকো 😒🐸",
   "কি হলো, মিস টিস করচ্ছো নাকি 🤣",
   "𝐓𝐫𝐮𝐬𝐭 𝐦𝐞 𝐢𝐚𝐦 ARIYAN 𝐟𝐫𝐨𝐦 SA BB IR 🧃",
-  "𝗛𝗲𝘆 𝘅𝗮𝗻 𝗶𝗮𝗺 ARIYAN AI ✨",
+  "𝗛𝗲𝘆 𝘅𝗮𝗻 𝗶𝗮𝗺 ARIYAN 𝐀𝐈 ✨",
   "𝐓𝐨𝐫 𝐣𝐧𝐧𝐨 𝐛𝐬𝐢 𝐚𝐜𝐡𝐢, 𝐣𝐥𝐝𝐢 𝐛𝐨𝐥 𝐤𝐢 𝐝𝐫𝐤𝐚𝐫 ✨",
   "একাকিত্ব মানুষকে ধীরে ধীরে শেষ করে ফেলে 🥀",
   "চা খাবেন, ঢেলে দেবো..? 😙🤏",
@@ -130,7 +149,6 @@ async function askAI(text, history = []) {
       }
     ];
 
-
     const response = await axios.post(
       API_URL,
       {
@@ -145,10 +163,8 @@ async function askAI(text, history = []) {
       }
     );
 
-
     const answer =
       response.data?.choices?.[0]?.message?.content;
-
 
     if (!answer) return null;
 
@@ -174,13 +190,10 @@ module.exports = {
 
   config: {
     name: "baby",
-
-    version: "13.0",
-
+    version: "14.0",
     author: "ARIYAN AHMED SABBIR",
 
     countDown: 2,
-
     role: 0,
 
     shortDescription: {
@@ -226,9 +239,7 @@ module.exports = {
       `${event.threadID}_${event.senderID}`;
 
 
-    // ========================================
-    // শুধু baby/bot লিখলে
-    // ========================================
+    // শুধু baby লিখলে
     if (!text) {
 
       const reply =
@@ -238,12 +249,11 @@ module.exports = {
           )
         ];
 
-
-      const info = await api.sendMessage(
-        reply,
-        event.threadID
+      const info = await sendReply(
+        api,
+        event,
+        reply
       );
-
 
       setReply(
         info,
@@ -274,10 +284,13 @@ module.exports = {
 
     if (!answer) {
 
-      return api.sendMessage(
-        "⚠️ ARIYAN AI এখন উত্তর দিতে পারছে না। একটু পরে আবার চেষ্টা করো।",
-        event.threadID
+      await sendReply(
+        api,
+        event,
+        "⚠️ ARIYAN AI এখন উত্তর দিতে পারছে না। একটু পরে আবার চেষ্টা করো।"
       );
+
+      return;
     }
 
 
@@ -300,21 +313,15 @@ module.exports = {
     );
 
 
-    // ========================================
-    // ⭐ USER MESSAGE-এর উপর REPLY
-    // ========================================
-    const info = await api.sendMessage(
-      `🤖 ARIYAN AI\n\n${answer}`,
-      event.threadID,
-      event.messageID
-        ? {
-            replyTo: event.messageID
-          }
-        : undefined
+    // ⭐ USER-এর ORIGINAL MESSAGE-এর উপর reply
+    const info = await sendReply(
+      api,
+      event,
+      `🤖 ARIYAN AI\n\n${answer}`
     );
 
 
-    // পরের chain
+    // পরের reply chain
     setReply(
       info,
       event,
@@ -334,7 +341,6 @@ module.exports = {
 
     const text =
       event.body?.trim();
-
 
     if (!text) return;
 
@@ -363,10 +369,13 @@ module.exports = {
 
     if (!answer) {
 
-      return api.sendMessage(
-        "⚠️ উত্তর দিতে একটু সমস্যা হচ্ছে 😵‍💫",
-        event.threadID
+      await sendReply(
+        api,
+        event,
+        "⚠️ উত্তর দিতে একটু সমস্যা হচ্ছে 😵‍💫"
       );
+
+      return;
     }
 
 
@@ -389,17 +398,12 @@ module.exports = {
     );
 
 
-    // ========================================
-    // ⭐ USER-এর REPLY MESSAGE-এর উপর REPLY
-    // ========================================
-    const info = await api.sendMessage(
-      `🤖 ARIYAN AI\n\n${answer}`,
-      event.threadID,
-      event.messageID
-        ? {
-            replyTo: event.messageID
-          }
-        : undefined
+    // ⭐ USER যেই reply message পাঠিয়েছে,
+    // সেই message-এর উপরেই AI reply করবে
+    const info = await sendReply(
+      api,
+      event,
+      `🤖 ARIYAN AI\n\n${answer}`
     );
 
 
@@ -422,7 +426,6 @@ module.exports = {
 
     const body =
       event.body?.trim();
-
 
     if (!body) return;
 
@@ -480,14 +483,10 @@ module.exports = {
         `${event.threadID}_${event.senderID}`;
 
 
-      const info = await api.sendMessage(
-        reply,
-        event.threadID,
-        event.messageID
-          ? {
-              replyTo: event.messageID
-            }
-          : undefined
+      const info = await sendReply(
+        api,
+        event,
+        reply
       );
 
 
@@ -522,6 +521,7 @@ module.exports = {
     if (!message) return;
 
 
+    // baby / bot শুধু লিখলে
     if (!message.length) {
 
       const reply =
@@ -536,14 +536,10 @@ module.exports = {
         `${event.threadID}_${event.senderID}`;
 
 
-      const info = await api.sendMessage(
-        reply,
-        event.threadID,
-        event.messageID
-          ? {
-              replyTo: event.messageID
-            }
-          : undefined
+      const info = await sendReply(
+        api,
+        event,
+        reply
       );
 
 
@@ -583,14 +579,17 @@ module.exports = {
 
     if (!answer) {
 
-      return api.sendMessage(
-        "⚠️ ARIYAN AI এখন একটু ব্যস্ত 😵‍💫",
-        event.threadID
+      await sendReply(
+        api,
+        event,
+        "⚠️ ARIYAN AI এখন একটু ব্যস্ত 😵‍💫"
       );
+
+      return;
     }
 
 
-    // Memory
+    // Memory update
     saveHistory(
       historyKey,
       [
@@ -609,17 +608,11 @@ module.exports = {
     );
 
 
-    // ========================================
-    // ⭐ ORIGINAL USER MESSAGE-এর উপর REPLY
-    // ========================================
-    const info = await api.sendMessage(
-      `🤖 ARIYAN AI\n\n${answer}`,
-      event.threadID,
-      event.messageID
-        ? {
-            replyTo: event.messageID
-          }
-        : undefined
+    // ⭐ ORIGINAL USER MESSAGE-এর উপর reply
+    const info = await sendReply(
+      api,
+      event,
+      `🤖 ARIYAN AI\n\n${answer}`
     );
 
 
@@ -630,4 +623,4 @@ module.exports = {
       historyKey
     );
   }
-};
+};t
